@@ -9,7 +9,17 @@ import (
 )
 
 func main() {
-	file, err := os.Open("TEST.EBC")
+	var ebcdicFile string = ""
+
+	if len(os.Args) == 2 {
+		ebcdicFile = os.Args[1]
+	} else {
+		fmt.Println("Error: No filename specified")
+		fmt.Println("\nUsage:\n    " + os.Args[0] + " <EBCDIC file>")
+		os.Exit(1)
+	}
+
+	file, err := os.Open(ebcdicFile)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -36,7 +46,6 @@ func main() {
 			if val, ok := ebcdic_to_ascii[b]; ok {
 				result = append(result, val)
 			}
-
 
 		}
 
