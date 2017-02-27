@@ -26,7 +26,7 @@ func main() {
 
 	defer file.Close()
 
-	var result []byte
+	var result []rune
 	byteCounter := 0
 
 	reader := bufio.NewReader(file)
@@ -44,7 +44,7 @@ func main() {
 				result = append(result, 0x0d, 0x0a)
 			}
 			if val, ok := ebcdic_to_ascii[b]; ok {
-				result = append(result, val)
+				result = append(result, rune(val))
 			}
 
 		}
