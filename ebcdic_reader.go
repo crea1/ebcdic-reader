@@ -50,19 +50,24 @@ func main() {
 			log.Fatal(err)
 		} else {
 			byteCounter++
-			// For some reason I only get CR and not CRLF from EBCDIF file. Add LF for printing
-			if b == 0x0d {
-				result = append(result, 0x0d, 0x0a)
-			}
-
-			if val, ok := ebcdic_to_ascii_map[b]; ok {
-				result = append(result, rune(val))
-			}
-
+			result = append(result, map_ebcdic_byte_to_ascii_rune(b, ebcdic_to_ascii_map)...)
 		}
 
 	}
 
 	//fmt.Printf("Read bytes : %d Output bytes : %d\n", byteCounter, len(result))
 	fmt.Println(string(result[:]))
+}
+
+func map_ebcdic_byte_to_ascii_rune(b byte, ebcdic_to_ascii_map map[byte]byte) []rune {
+	var result []rune
+	// For some reason I only get CR and not CRLF from EBCDIF file. Add LF for printing
+	if b == 0x0d {
+		result = append(result, rune(0x0d), rune(0x0a))
+	}
+
+	if val, ok := ebcdic_to_ascii_map[b]; ok {
+		result = append(result, rune(val))
+	}
+	return result
 }
